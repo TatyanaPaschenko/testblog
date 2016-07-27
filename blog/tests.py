@@ -24,22 +24,19 @@ class BlogViewTests(TestCase):
 
     def test_new_post_create_ok(self):
         response = self.client.post('/admin/login/', {'username': "admin", 'password': "1234567admin"})
-        # self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         self.assertEqual(Post.objects.count(), 5)
 
         response = self.client.post(reverse('post_new'), {'title':'test title', 'text':'new test post'})
-        # self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
         self.assertEqual(Post.objects.count(), 6)
-
         response = self.client.get(reverse('post_detail', kwargs={'pk':6}))
         self.assertContains(response=response, text='test title')
         self.assertContains(response=response, text='test post')  
 
     def test_edit_post_change_post_ok(self):
-
         response = self.client.post('/admin/login/', {'username': "admin", 'password': "1234567admin"})
         self.assertEqual(response.status_code, 302)
-
         response = self.client.get(reverse('post_edit', kwargs={'pk':3}))
         self.assertEqual(response.status_code, 200)
         response = self.client.post(reverse('post_edit', kwargs={'pk':3}), {'title':'edit title', 'text':'edit post'})
